@@ -29,7 +29,19 @@ def announcements(lang):
         return r
     else:
         return send_file('data/error.json')
-    
+
+@get_info.route('/<lang>/new')
+def newEvents(lang):
+    start = int(request.args.get('start', 0))
+    end = request.args.get('end','end')
+    if end != 'end':
+        end = int(end)
+    if(os.path.isdir('data/'+lang)):
+        r = make_response(from_log('data/'+lang+'/new', start, end))
+        r.mimetype='application/json'
+        return r
+    else:
+        return send_file('data/error.json')
 
 def from_log(folder,start,end):
     if start < 0 or (end != 'end' and end < 0):
@@ -42,3 +54,10 @@ def from_log(folder,start,end):
             with open(folder+'/'+n) as e:
                 items.append(e.read())
         return collection % ','.join(items)
+
+@get_info.route('/<lang>/clubs')
+def clubs(lang):
+    if(os.path.isdir('data/'+lang)):
+        return send_file('data/'+lang+'/clubs.json')
+    else:
+        return send_file('data/error.json')
