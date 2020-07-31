@@ -61,3 +61,10 @@ def clubs(lang):
         return send_file('data/'+lang+'/clubs.json')
     else:
         return send_file('data/error.json')
+
+@get_info.route('/<lang>/student')
+def student(lang):
+    if(os.path.isdir('data/'+lang)):
+        return send_file('data/'+lang+'/student.json')
+    else:
+        return send_file('data/error.json')
