@@ -18,7 +18,10 @@ def login():
             session["loggedIn"] = False
         return redirect(url_for("ui.home"))
     elif request.method  == "GET":
-        return render_template("login.html")
+        if "loggedIn" in session and session["loggedIn"] == True:
+            return redirect(url_for("ui.home"))
+        else:
+            return render_template("login.html")
 
 
 @ui.route('/')
