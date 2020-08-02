@@ -1,0 +1,29 @@
+<html>
+    <body>
+		<div>
+			<h2>Events:</h2>
+			{% for event in events %}
+				<div style="border-color:black;border-style:solid">
+					<h3>{{event.title}}</h3>
+					<p>{{event.text}}</p>
+					<p>Location: {{event.location}}</p>
+					<p>Date: {{event.date}}</p>
+				</div>
+			{% endfor %}
+		</div>
+		<div>
+			<h2>New Event:</h2>
+			<form method="post">
+				<label for="title">Title:</label>
+				<input type="text" id="title" name="title"/><br/>
+				<label for="text">Text:</label>
+				<input type="text" id="text" name="text"/><br/>
+				<label for="location">Location:</label>
+				<input type="text" id="location" name="location"/><br/>
+				<label for="date">Date:</label>
+				<input type="date" id="date" name="date"/><br/>
+				<input type="submit" value="Submit"/>
+			</form>
+		</div>
+    </body>
+</html>
