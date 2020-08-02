@@ -1,5 +1,20 @@
 <html>
     <body>
-
+		<div>
+			<h2>Announcements:</h2>
+			<ul>
+				{% for name in names %}
+					<li>{{name}}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div>
+			<h2>New Announcement:</h2>
+			<form method="post">
+				<label for="message">Message:</label><br/>
+				<input type="text" id="message" name="message"/><br/>
+				<input type="submit" value="Submit"/>
+			</form>
+		</div>
     </body>
 </html>
