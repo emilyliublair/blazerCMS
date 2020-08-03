@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, send_file, make_response, request, session, render_template, redirect, url_for
 import json
-from helper import from_log,update_log,sessionvalidated
+from helper import from_log,update_log,sessionvalidated,next_element
 import json
 
 ui = Blueprint('ui', __name__, url_prefix='/ui')
@@ -36,7 +36,7 @@ def announcements(lang):
     if request.method == "GET":
         return render_template('announcements.html',names=names)
     elif request.method == "POST":
-        name = 'announcement'+str(len(announcelog['data']))+'.json'
+        name = next_element(lang,'announcements')
         content = json.dumps(dict(request.form))
         with open('data/'+lang+'/announcements/'+name,'w') as f:
             f.write(content)
@@ -51,7 +51,7 @@ def events(lang):
     if request.method == "GET":
         return render_template('events.html',events=events)
     elif request.method == "POST":
-        name = 'event'+str(len(events))+'.json'
+        name = next_element(lang,'events')
         content = json.dumps(dict(request.form))
         with open('data/'+lang+'/events/'+name,'w') as f:
             f.write(content)
