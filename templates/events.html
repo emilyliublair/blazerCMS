@@ -8,6 +8,11 @@
 					<p>{{event.text}}</p>
 					<p>Location: {{event.location}}</p>
 					<p>Date: {{event.date}}</p>
+					<form action={{url_for("ui.delevent",lang=lang)}} method="POST">
+						<input type="hidden" name="num" value={{loop.index-1}}>
+						<input type="hidden" name="title" value="{{event.title}}">
+						<input type="submit" name="submit" value="Delete">
+					</form>
 				</div>
 			{% endfor %}
 		</div>

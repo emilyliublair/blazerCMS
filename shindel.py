@@ -52,7 +52,6 @@ def delannounce(lang):
         del_log('data/'+lang+'/announcements',int(request.form['num']))
         return redirect(url_for("ui.announcements",lang=lang))
     else:
-        print(request.form)
         return "Please do not use this API incorrectly"
 
 @ui.route('/<lang>/events',methods=["GET","POST"])
@@ -60,7 +59,7 @@ def delannounce(lang):
 def events(lang):
     events=json.loads(from_log('data/'+lang+'/events',0,'end'))['data']
     if request.method == "GET":
-        return render_template('events.html',events=events)
+        return render_template('events.html',events=events,lang=lang)
     elif request.method == "POST":
         name = next_element(lang,'events')
         content = json.dumps(dict(request.form))
@@ -68,4 +67,14 @@ def events(lang):
             f.write(content)
         events.insert(0,dict(request.form))
         update_log('data/'+lang+'/events',name)
-        return render_template('events.html',events=events)
+        return render_template('events.html',events=events,lang=lang)
+
+@ui.route('/<lang>/events/del',methods=["POST"])
+@sessionvalidated
+def delevent(lang):
+    eventlog=json.loads(from_log('data/'+lang+'/events',0,'end'))['data']
+    if eventlog[int(request.form['num'])]['title'] == request.form['title']:
+        del_log('data/'+lang+'/events',int(request.form['num']))
+        return redirect(url_for("ui.events",lang=lang))
+    else:
+        return "Please do not use this API incorrectly"

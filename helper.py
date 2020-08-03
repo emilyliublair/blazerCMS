@@ -22,7 +22,10 @@ def update_log(folder,fileName):
 
 def next_element(lang,folder):
     with open('data/'+lang+'/'+folder+'/log.json') as f:
-        fName = json.load(f)['names'][0][:-5]
+        names = json.load(f)['names']
+        if len(names)==0:
+            return 'item0.json'
+        fName=names[0][:-5]
         value = ''.join(itertools.takewhile(lambda x:x.isdigit(),reversed(fName)))[::-1]
         nName = fName[:-len(value)]+str(int(value)+1)
         return nName+'.json'
