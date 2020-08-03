@@ -27,6 +27,12 @@ def next_element(lang,folder):
         nName = fName[:-len(value)]+str(int(value)+1)
         return nName+'.json'
 
+def del_log(folder,index):
+    with open(folder+'/log.json') as f:
+        names = json.load(f)['names']
+        del names[index]
+        json.dump({'names':names},open(folder+'/log.json','w'))
+
 def sessionvalidated(f):
     @wraps(f)
     def wrapper(*args,**kwargs):

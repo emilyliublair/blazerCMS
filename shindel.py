@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, send_file, make_response, request, session, render_template, redirect, url_for
 import json
-from helper import from_log,update_log,sessionvalidated,next_element
+from helper import from_log,update_log,sessionvalidated,next_element,del_log
 import json
 
 ui = Blueprint('ui', __name__, url_prefix='/ui')
@@ -25,7 +25,7 @@ def login():
 
 @ui.route('/')
 @sessionvalidated
-def home():    
+def home():
     return render_template("main.html")
 
 @ui.route('/<lang>/announcements',methods=["GET","POST"])
@@ -34,7 +34,7 @@ def announcements(lang):
     announcelog=json.loads(from_log('data/'+lang+'/announcements',0,'end'))
     names = [x['message'] for x in announcelog['data']]
     if request.method == "GET":
-        return render_template('announcements.html',names=names)
+        return render_template('announcements.html',names=names,lang=lang)
     elif request.method == "POST":
         name = next_element(lang,'announcements')
         content = json.dumps(dict(request.form))
@@ -42,7 +42,18 @@ def announcements(lang):
             f.write(content)
         names.insert(0,request.form['message'])
         update_log('data/'+lang+'/announcements',name)
-        return render_template('announcements.html',names=names)
+        return render_template('announcements.html',names=names,lang=lang)
+
+@ui.route('/<lang>/announcements/del',methods=["POST"])
+@sessionvalidated
+def delannounce(lang):
+    announcelog=json.loads(from_log('data/'+lang+'/announcements',0,'end'))['data']
+    if announcelog[int(request.form['num'])]['message'] == request.form['value']:
+        del_log('data/'+lang+'/announcements',int(request.form['num']))
+        return redirect(url_for("ui.announcements",lang=lang))
+    else:
+        print(request.form)
+        return "Please do not use this API incorrectly"
 
 @ui.route('/<lang>/events',methods=["GET","POST"])
 @sessionvalidated
