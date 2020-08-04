@@ -31,24 +31,23 @@ def home():
 @ui.route('/<lang>/announcements',methods=["GET","POST"])
 @sessionvalidated
 def announcements(lang):
-    announcelog=json.loads(from_log('data/'+lang+'/announcements',0,'end'))
-    names = [x['message'] for x in announcelog['data']]
+    announcementlog=json.loads(from_log('data/'+lang+'/announcements',0,'end'))['data']
     if request.method == "GET":
-        return render_template('announcements.html',names=names,lang=lang)
+        return render_template('announcements.html',names=announcementlog,lang=lang)
     elif request.method == "POST":
         name = next_element(lang,'announcements')
         content = json.dumps(dict(request.form))
         with open('data/'+lang+'/announcements/'+name,'w') as f:
             f.write(content)
-        names.insert(0,request.form['message'])
+        announcementlog.insert(0,dict(request.form))
         update_log('data/'+lang+'/announcements',name)
-        return render_template('announcements.html',names=names,lang=lang)
+        return render_template('announcements.html',names=announcementlog,lang=lang)
 
 @ui.route('/<lang>/announcements/del',methods=["POST"])
 @sessionvalidated
 def delannounce(lang):
-    announcelog=json.loads(from_log('data/'+lang+'/announcements',0,'end'))['data']
-    if announcelog[int(request.form['num'])]['message'] == request.form['value']:
+    announcement=json.loads(from_log('data/'+lang+'/announcements',0,'end'))['data'][int(request.form['num'])]
+    if str(announcement) == str(request.form['value']):
         del_log('data/'+lang+'/announcements',int(request.form['num']))
         return redirect(url_for("ui.announcements",lang=lang))
     else:
@@ -57,23 +56,23 @@ def delannounce(lang):
 @ui.route('/<lang>/events',methods=["GET","POST"])
 @sessionvalidated
 def events(lang):
-    events=json.loads(from_log('data/'+lang+'/events',0,'end'))['data']
+    eventlog=json.loads(from_log('data/'+lang+'/events',0,'end'))['data']
     if request.method == "GET":
-        return render_template('events.html',events=events,lang=lang)
+        return render_template('events.html',events=eventlog,lang=lang)
     elif request.method == "POST":
         name = next_element(lang,'events')
         content = json.dumps(dict(request.form))
         with open('data/'+lang+'/events/'+name,'w') as f:
             f.write(content)
-        events.insert(0,dict(request.form))
+        eventlog.insert(0,dict(request.form))
         update_log('data/'+lang+'/events',name)
-        return render_template('events.html',events=events,lang=lang)
+        return render_template('events.html',events=eventlog,lang=lang)
 
 @ui.route('/<lang>/events/del',methods=["POST"])
 @sessionvalidated
 def delevent(lang):
-    eventlog=json.loads(from_log('data/'+lang+'/events',0,'end'))['data']
-    if eventlog[int(request.form['num'])]['title'] == request.form['title']:
+    event=json.loads(from_log('data/'+lang+'/events',0,'end'))['data'][int(request.form['num'])]
+    if str(event) == str(request.form['value']):
         del_log('data/'+lang+'/events',int(request.form['num']))
         return redirect(url_for("ui.events",lang=lang))
     else:

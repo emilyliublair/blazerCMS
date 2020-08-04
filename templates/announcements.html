@@ -3,12 +3,12 @@
 		<div>
 			<h2>Announcements:</h2>
 			<ul>
-				{% for name in names %}
-					<li>{{name}}</li>
+				{% for announcement in names %}
+					<li>{{announcement.message}}</li>
 					<form action={{url_for("ui.delannounce",lang=lang)}} method="POST">
 						<input type="hidden" name="num" value={{loop.index-1}}>
-						<input type="hidden" name="value" value="{{name}}">
-						<input type="submit" name="submit" value="Delete">
+						<input type="hidden" name="value" value="{{announcement}}">
+						<input type="submit" value="Delete">
 					</form>
 				{% endfor %}
 			</ul>
