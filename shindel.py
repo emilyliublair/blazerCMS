@@ -56,9 +56,12 @@ def delannounce(lang):
 @ui.route('/<lang>/events',methods=["GET","POST"])
 @sessionvalidated
 def events(lang):
+    start=int(request.args.get('start',0))
     eventlog=json.loads(from_log('data/'+lang+'/events',0,'end'))['data']
+    if start < 0 or start >= len(eventlog):
+        raise ValueError
     if request.method == "GET":
-        return render_template('events.html',events=eventlog,lang=lang)
+        return render_template('events.html',events=eventlog[start:start+5],lang=lang,start=start)
     elif request.method == "POST":
         name = next_element(lang,'events')
         content = json.dumps(dict(request.form))
@@ -66,7 +69,7 @@ def events(lang):
             f.write(content)
         eventlog.insert(0,dict(request.form))
         update_log('data/'+lang+'/events',name)
-        return render_template('events.html',events=eventlog,lang=lang)
+        return render_template('events.html',events=eventlog[start:start+5],lang=lang,start=start)
 
 @ui.route('/<lang>/events/del',methods=["POST"])
 @sessionvalidated
