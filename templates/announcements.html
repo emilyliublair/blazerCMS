@@ -2,16 +2,18 @@
     <body>
 		<div>
 			<h2>Announcements:</h2>
-			<ul>
-				{% for announcement in names %}
-					<li>{{announcement.message}}</li>
+			{% for announcement in names %}
+				<div style="border-color:black;border-style:solid">
+					<p>{{announcement.message}}</p>
 					<form action={{url_for("ui.delannounce",lang=lang)}} method="POST">
 						<input type="hidden" name="num" value={{loop.index-1}}>
 						<input type="hidden" name="value" value="{{announcement}}">
 						<input type="submit" value="Delete">
 					</form>
-				{% endfor %}
-			</ul>
+				</div>
+			{% endfor %}
+			<a href="{{url_for('ui.announcements',lang=lang,start=start-5)}}">Previous</a> |
+			<a href="{{url_for('ui.announcements',lang=lang,start=start+5)}}">Next</a>
 		</div>
 		<div>
 			<h2>New Announcement:</h2>

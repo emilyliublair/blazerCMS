@@ -1,8 +1,9 @@
 import os
-from flask import Blueprint, send_file, make_response, request, session, render_template, redirect, url_for
+from flask import Blueprint, send_file, make_response, request, session, render_template, redirect, url_for, abort
 import json
 from helper import from_log,update_log,sessionvalidated,next_element,del_log
 import json
+import base64
 
 ui = Blueprint('ui', __name__, url_prefix='/ui')
 
@@ -31,9 +32,14 @@ def home():
 @ui.route('/<lang>/announcements',methods=["GET","POST"])
 @sessionvalidated
 def announcements(lang):
+    start=int(request.args.get('start',0))
     announcementlog=json.loads(from_log('data/'+lang+'/announcements',0,'end'))['data']
+    if start < 0:
+        start = 0
+    elif start >= len(announcementlog):
+        start = len(announcementlog)-len(announcementlog)%5
     if request.method == "GET":
-        return render_template('announcements.html',names=announcementlog,lang=lang)
+        return render_template('announcements.html',start=start,names=announcementlog[start:start+5],lang=lang)
     elif request.method == "POST":
         name = next_element(lang,'announcements')
         content = json.dumps(dict(request.form))
@@ -41,7 +47,7 @@ def announcements(lang):
             f.write(content)
         announcementlog.insert(0,dict(request.form))
         update_log('data/'+lang+'/announcements',name)
-        return render_template('announcements.html',names=announcementlog,lang=lang)
+        return render_template('announcements.html',start=start,names=announcementlog[start:start+5],lang=lang)
 
 @ui.route('/<lang>/announcements/del',methods=["POST"])
 @sessionvalidated
@@ -58,8 +64,10 @@ def delannounce(lang):
 def events(lang):
     start=int(request.args.get('start',0))
     eventlog=json.loads(from_log('data/'+lang+'/events',0,'end'))['data']
-    if start < 0 or start >= len(eventlog):
-        raise ValueError
+    if start < 0:
+        start=0
+    elif start >= len(eventlog):
+        start = len(eventlog)-len(eventlog)%5
     if request.method == "GET":
         return render_template('events.html',events=eventlog[start:start+5],lang=lang,start=start)
     elif request.method == "POST":
@@ -80,3 +88,27 @@ def delevent(lang):
         return redirect(url_for("ui.events",lang=lang))
     else:
         return "Please do not use this API incorrectly"
+
+@ui.route('<lang>/new',methods=["GET","POST"])
+@sessionvalidated
+def new(lang):
+    start=int(request.args.get('start',0))
+    newlog=json.loads(from_log('data/'+lang+'/new',0,'end'))['data']
+    if start < 0:
+        start=0
+    elif start >= len(newlog):
+        start = len(newlog)-len(newlog)%5
+    if request.method == "GET":
+        return render_template('new.html',news=newlog[start:start+5])
+    else:
+        name = next_element(lang,'new')
+        content = {
+            'icon':base64.b64encode(request.files['icon'].read()).decode(),
+            'name':request.form['name'],
+            'date':request.form['date']
+        }
+        with open('data/'+lang+'/new/'+name,'w') as f:
+            f.write(json.dumps(content))
+        update_log('data/'+lang+'/new',name)
+        newlog.insert(0,content)
+        return render_template('new.html',news=newlog[start:start+5])
