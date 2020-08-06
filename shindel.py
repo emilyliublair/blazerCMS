@@ -122,3 +122,30 @@ def delnew(lang):
         return redirect(url_for('ui.new',lang=lang))
     else:
         return "Please do not use this API incorrectly"
+
+@ui.route('<lang>/clubs',methods=["GET","POST"])
+@sessionvalidated
+def clubs(lang):
+    with open('data/'+lang+'/clubs.json') as f:
+        clubdata = json.load(f)['names']
+    if request.method=="GET":
+        return render_template('clubs.html',clubs=clubdata,lang=lang)
+    elif request.method=="POST":
+        clubdata.append(request.form['clubname'])
+        clubdata=sorted(clubdata)
+        with open('data/'+lang+'/clubs.json','w') as f:
+            json.dump({'names':clubdata},f)
+        return render_template('clubs.html',clubs=clubdata,lang=lang)
+
+@ui.route('<lang>/clubs/del',methods=["POST"])
+@sessionvalidated
+def delclub(lang):
+    index=int(request.form['index'])
+    clubname=request.form['clubname']
+    with open('data/'+lang+'/clubs.json') as f:
+        clubdata = json.load(f)['names']
+    if clubdata[index] == clubname:
+        del clubdata[index]
+    with open('data/'+lang+'/clubs.json','w') as f:
+        json.dump({'names':clubdata},f)
+    return redirect(url_for('ui.clubs',lang=lang))

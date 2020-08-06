@@ -1,0 +1,21 @@
+<html>
+	<body>
+		<h2>Clubs:</h2>
+		<ul>
+			{% for club in clubs %}
+				<li>{{club}}</li>
+				<form action="{{url_for('ui.delclub',lang=lang)}}" method="POST">
+					<input type="hidden" name="clubname" value="{{club}}"/>
+					<input type="hidden" name="index" value="{{loop.index-1}}"/>
+					<input type="submit" value="Delete"/>
+				</form>
+			{% endfor %}
+		</ul>
+		<h2>New Club:</h2>
+		<form method="POST">
+			<label for="name">Club Name:</label>
+			<input type="text" id="name" name="clubname"/><br/>
+			<input type="submit" value="Submit"/>
+		</form>
+	</body>
+</html>
