@@ -32,14 +32,14 @@ def home():
 @ui.route('/<lang>/announcements',methods=["GET","POST"])
 @sessionvalidated
 def announcements(lang):
-    start=int(request.args.get('start',0))
+    page=int(request.args.get('page',0))
     announcementlog=json.loads(from_log('data/'+lang+'/announcements',0,'end'))['data']
-    if start < 0:
-        start = 0
-    elif start >= len(announcementlog):
-        start = len(announcementlog)-len(announcementlog)%5
+    if page <= 0:
+        page = 0
+    elif page > (len(announcementlog)-1) // 5:
+        page = (len(announcementlog)-1)//5
     if request.method == "GET":
-        return render_template('announcements.html',start=start,names=announcementlog[start:start+5],lang=lang)
+        return render_template('announcements.html',page=page,names=announcementlog[page*5:page*5+5],lang=lang)
     elif request.method == "POST":
         name = next_element(lang,'announcements')
         content = json.dumps(dict(request.form))
@@ -47,7 +47,7 @@ def announcements(lang):
             f.write(content)
         announcementlog.insert(0,dict(request.form))
         update_log('data/'+lang+'/announcements',name)
-        return render_template('announcements.html',start=start,names=announcementlog[start:start+5],lang=lang)
+        return render_template('announcements.html',start=start,names=announcementlog[page*5:page*5+5],lang=lang)
 
 @ui.route('/<lang>/announcements/del',methods=["POST"])
 @sessionvalidated
@@ -62,14 +62,14 @@ def delannounce(lang):
 @ui.route('/<lang>/events',methods=["GET","POST"])
 @sessionvalidated
 def events(lang):
-    start=int(request.args.get('start',0))
+    page=int(request.args.get('page',0))
     eventlog=json.loads(from_log('data/'+lang+'/events',0,'end'))['data']
-    if start < 0:
-        start=0
-    elif start >= len(eventlog):
-        start = len(eventlog)-len(eventlog)%5
+    if page <= 0:
+        page = 0
+    elif page > (len(eventlog)-1) // 5:
+        page = (len(eventlog)-1)//5
     if request.method == "GET":
-        return render_template('events.html',events=eventlog[start:start+5],lang=lang,start=start)
+        return render_template('events.html',events=eventlog[page*5:page*5+5],lang=lang,page=page)
     elif request.method == "POST":
         name = next_element(lang,'events')
         content = json.dumps(dict(request.form))
@@ -77,7 +77,7 @@ def events(lang):
             f.write(content)
         eventlog.insert(0,dict(request.form))
         update_log('data/'+lang+'/events',name)
-        return render_template('events.html',events=eventlog[start:start+5],lang=lang,start=start)
+        return render_template('events.html',events=eventlog[page*5:page*5+5],lang=lang,page=page)
 
 @ui.route('/<lang>/events/del',methods=["POST"])
 @sessionvalidated
@@ -89,17 +89,17 @@ def delevent(lang):
     else:
         return "Please do not use this API incorrectly"
 
-@ui.route('<lang>/new',methods=["GET","POST"])
+@ui.route('/<lang>/new',methods=["GET","POST"])
 @sessionvalidated
 def new(lang):
-    start=int(request.args.get('start',0))
+    page=int(request.args.get('page',0))
     newlog=json.loads(from_log('data/'+lang+'/new',0,'end'))['data']
-    if start < 0:
-        start=0
-    elif start >= len(newlog):
-        start = len(newlog)-len(newlog)%5
+    if page <= 0:
+        page = 0
+    elif page > (len(newlog)-1) // 5:
+        page = (len(newlog)-1)//5
     if request.method == "GET":
-        return render_template('new.html',news=newlog[start:start+5])
+        return render_template('new.html',news=newlog[page*5:page*5+5],page=page,lang=lang)
     else:
         name = next_element(lang,'new')
         content = {
@@ -111,4 +111,14 @@ def new(lang):
             f.write(json.dumps(content))
         update_log('data/'+lang+'/new',name)
         newlog.insert(0,content)
-        return render_template('new.html',news=newlog[start:start+5])
+        return render_template('new.html',news=newlog[page*5:page*5+5],page=page,lang=lang)
+
+@ui.route('/<lang>/new/del',methods=["POST"])
+@sessionvalidated
+def delnew(lang):
+    newitem=json.loads(from_log('data/'+lang+'/new',0,'end'))['data'][int(request.form['num'])]
+    if str(newitem) == str(request.form['value']):
+        del_log('data/'+lang+'/new',int(request.form['num']))
+        return redirect(url_for('ui.new',lang=lang))
+    else:
+        return "Please do not use this API incorrectly"

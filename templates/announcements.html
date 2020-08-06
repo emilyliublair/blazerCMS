@@ -6,14 +6,14 @@
 				<div style="border-color:black;border-style:solid">
 					<p>{{announcement.message}}</p>
 					<form action={{url_for("ui.delannounce",lang=lang)}} method="POST">
-						<input type="hidden" name="num" value={{loop.index-1}}>
+						<input type="hidden" name="num" value={{page*5+loop.index-1}}>
 						<input type="hidden" name="value" value="{{announcement}}">
 						<input type="submit" value="Delete">
 					</form>
 				</div>
 			{% endfor %}
-			<a href="{{url_for('ui.announcements',lang=lang,start=start-5)}}">Previous</a> |
-			<a href="{{url_for('ui.announcements',lang=lang,start=start+5)}}">Next</a>
+			<a href="{{url_for('ui.announcements',lang=lang,page=page-1)}}">Previous</a> |
+			<a href="{{url_for('ui.announcements',lang=lang,page=page+1)}}">Next</a>
 		</div>
 		<div>
 			<h2>New Announcement:</h2>

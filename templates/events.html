@@ -9,14 +9,14 @@
 					<p>Location: {{event.location}}</p>
 					<p>Date: {{event.date}}</p>
 					<form action={{url_for("ui.delevent",lang=lang)}} method="POST">
-						<input type="hidden" name="num" value={{loop.index-1}}>
+						<input type="hidden" name="num" value={{page*5+loop.index-1}}>
 						<input type="hidden" name="value" value="{{event}}">
 						<input type="submit" value="Delete">
 					</form>
 				</div>
 			{% endfor %}
-			<a href="{{url_for('ui.events',lang=lang,start=start-5)}}">Previous</a> | 
-			<a href="{{url_for('ui.events',lang=lang,start=start+5)}}">Next</a>
+			<a href="{{url_for('ui.events',lang=lang,page=page-1)}}">Previous</a> | 
+			<a href="{{url_for('ui.events',lang=lang,page=page+1)}}">Next</a>
 		</div>
 		<div>
 			<h2>New Event:</h2>

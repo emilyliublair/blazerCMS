@@ -7,8 +7,15 @@
 					<h3>{{n.name}}</h3>
 					<p>Date: {{n.date}}</p>
 					<p>Icon: </p><image src="data:image/png;charset=utf-8;base64,{{n.icon}}"/>
+					<form action={{url_for("ui.delnew",lang=lang)}} method="POST">
+						<input type="hidden" name="num" value={{page*5+loop.index-1}}>
+						<input type="hidden" name="value" value="{{n}}">
+						<input type="submit" value="Delete">
+					</form>
 				</div>
 			{% endfor %}
+			<a href="{{url_for('ui.new',lang=lang,page=page-1)}}">Previous</a> | 
+			<a href="{{url_for('ui.new',lang=lang,page=page+1)}}">Next</a>
 		</div>
 		<div>
 			<h2>Create New:</h2>
@@ -16,7 +23,7 @@
 				<label for="name">Name:</label>
 				<input id="name" name="name" type="text"/><br/>
 				<label for="icon">Icon: </label>
-				<input type="file" name="icon" id="icon" accept="image/png, image/jpeg"/><br/>
+				<input type="file" name="icon" id="icon" accept="image/png"/><br/>
 				<label for="date">Date: </label>
 				<input type="date" name="date" id="date"/><br/>
 				<input type="submit" value="Submit"/>
