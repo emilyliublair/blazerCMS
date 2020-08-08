@@ -20,11 +20,11 @@
 		</div>
 		<div>
 			<h2>New Event:</h2>
-			<form method="post">
+			<form method="post" id="eventForm" action="{{url_for('ui.addevent',lang=lang,page=page)}}">
 				<label for="title">Title:</label>
 				<input type="text" id="title" name="title"/><br/>
 				<label for="text">Text:</label>
-				<input type="text" id="text" name="text"/><br/>
+        <textarea style="vertical-align:top;" type="text" form="eventForm" id="text" name="text"></textarea><br/>
 				<label for="location">Location:</label>
 				<input type="text" id="location" name="location"/><br/>
 				<label for="date">Date:</label>

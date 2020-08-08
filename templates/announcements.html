@@ -17,7 +17,7 @@
 		</div>
 		<div>
 			<h2>New Announcement:</h2>
-			<form method="post">
+			<form method="post" action="{{url_for('ui.addannounce',lang=lang,page=page)}}">
 				<label for="message">Message:</label><br/>
 				<input type="text" id="message" name="message"/><br/>
 				<input type="submit" value="Submit"/>
