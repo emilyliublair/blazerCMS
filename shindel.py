@@ -96,7 +96,9 @@ def delevent(lang):
 @ui.route('/<lang>/events/update',methods=["POST"])
 @sessionvalidated
 def updevent(lang):
-    update_element_using_index('data/'+lang+'/events',int(request.form['num']),request.form)
+    num = int(request.form['num'])
+    del request.form['num']
+    update_element_using_index('data/'+lang+'/events',num),request.form)
     return redirect(url_for("ui.events",lang=lang))
 
 @ui.route('/<lang>/new',methods=["GET","POST"])
