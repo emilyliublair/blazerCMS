@@ -29,7 +29,7 @@ def login():
 def home():
     return render_template("main.html")
 
-@ui.route('/<lang>/announcements',methods=["GET","POST"])
+@ui.route('/<lang>/announcements',methods=["GET"])
 @sessionvalidated
 def announcements(lang):
     page=int(request.args.get('page',0))
@@ -38,16 +38,18 @@ def announcements(lang):
         page = 0
     elif page > (len(announcementlog)-1) // 5:
         page = (len(announcementlog)-1)//5
-    if request.method == "GET":
-        return render_template('announcements.html',page=page,names=announcementlog[page*5:page*5+5],lang=lang)
-    elif request.method == "POST":
-        name = next_element(lang,'announcements')
-        content = json.dumps(dict(request.form))
-        with open('data/'+lang+'/announcements/'+name,'w') as f:
-            f.write(content)
-        announcementlog.insert(0,dict(request.form))
-        update_log('data/'+lang+'/announcements',name)
-        return render_template('announcements.html',start=start,names=announcementlog[page*5:page*5+5],lang=lang)
+    return render_template('announcements.html',page=page,names=announcementlog[page*5:page*5+5],lang=lang)
+
+@ui.route('/<lang>/announcements/add',methods=["POST"])
+@sessionvalidated
+def addannounce(lang):
+    page=int(request.args.get('page',0))
+    name = next_element(lang,'announcements')
+    content = json.dumps(dict(request.form))
+    with open('data/'+lang+'/announcements/'+name,'w') as f:
+        f.write(content)
+    update_log('data/'+lang+'/announcements',name)
+    return redirect(url_for('ui.announcements',lang=lang,page=page))
 
 @ui.route('/<lang>/announcements/del',methods=["POST"])
 @sessionvalidated
@@ -59,7 +61,7 @@ def delannounce(lang):
     else:
         return "Please do not use this API incorrectly"
 
-@ui.route('/<lang>/events',methods=["GET","POST"])
+@ui.route('/<lang>/events')
 @sessionvalidated
 def events(lang):
     page=int(request.args.get('page',0))
@@ -68,16 +70,18 @@ def events(lang):
         page = 0
     elif page > (len(eventlog)-1) // 5:
         page = (len(eventlog)-1)//5
-    if request.method == "GET":
-        return render_template('events.html',events=eventlog[page*5:page*5+5],lang=lang,page=page)
-    elif request.method == "POST":
-        name = next_element(lang,'events')
-        content = json.dumps(dict(request.form))
-        with open('data/'+lang+'/events/'+name,'w') as f:
-            f.write(content)
-        eventlog.insert(0,dict(request.form))
-        update_log('data/'+lang+'/events',name)
-        return render_template('events.html',events=eventlog[page*5:page*5+5],lang=lang,page=page)
+    return render_template('events.html',events=eventlog[page*5:page*5+5],lang=lang,page=page)
+
+@ui.route('/<lang>/events/add',methods=["POST"])
+@sessionvalidated
+def addevent(lang):
+    name = next_element(lang,'events')
+    content = json.dumps(dict(request.form))
+    with open('data/'+lang+'/events/'+name,'w') as f:
+        f.write(content)
+    update_log('data/'+lang+'/events',name)
+    page=int(request.args.get('page',0))
+    return redirect(url_for('ui.events',lang=lang,page=page))
 
 @ui.route('/<lang>/events/del',methods=["POST"])
 @sessionvalidated

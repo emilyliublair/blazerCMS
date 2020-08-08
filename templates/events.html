@@ -20,7 +20,7 @@
 		</div>
 		<div>
 			<h2>New Event:</h2>
-			<form method="post" id="eventForm">
+			<form method="post" id="eventForm" action="{{url_for('ui.addevent',lang=lang,page=page)}}">
 				<label for="title">Title:</label>
 				<input type="text" id="title" name="title"/><br/>
 				<label for="text">Text:</label>
