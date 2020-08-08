@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, send_file, make_response, request, session, render_template, redirect, url_for, abort
 import json
-from helper import from_log,update_log,sessionvalidated,next_element,del_log
+from helper import from_log,update_log,sessionvalidated,next_element,del_log,update_element_using_index
 import json
 import base64
 
@@ -88,6 +88,12 @@ def delevent(lang):
         return redirect(url_for("ui.events",lang=lang))
     else:
         return "Please do not use this API incorrectly"
+
+@ui.route('/<lang>/events/update',methods=["POST"])
+@sessionvalidated
+def updevent(lang):
+    update_element_using_index('data/'+lang+'/events',int(request.form['num']),request.form)
+    return redirect(url_for("ui.events",lang=lang))
 
 @ui.route('/<lang>/new',methods=["GET","POST"])
 @sessionvalidated

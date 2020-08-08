@@ -36,6 +36,11 @@ def del_log(folder,index):
         del names[index]
         json.dump({'names':names},open(folder+'/log.json','w'))
 
+def update_element_using_index(folder,index, contents):
+    with open(folder+'/log.json') as f:
+        name = json.load(f)['names'][index]
+        json.dump(contents, open(folder+'/'+name,"w"))
+
 def sessionvalidated(f):
     @wraps(f)
     def wrapper(*args,**kwargs):
