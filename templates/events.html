@@ -4,10 +4,17 @@
 			<h2>Events:</h2>
 			{% for event in events %}
 				<div style="border-color:black;border-style:solid">
-					<h3>{{event.title}}</h3>
-					<p>{{event.text}}</p>
-					<p>Location: {{event.location}}</p>
-					<p>Date: {{event.date}}</p>
+					<form action="{{url_for('ui.updevent',lang=lang)}}" method="POST" id="upForm">
+						<input type='text' style="font-size: 1.17em;border:0;" name="title" value="{{event.title}}"><br/>
+						<textarea id="ta{{page*5+loop.index-1}}" style="font-size: 16px;border:0;" >{{event.text}}</textarea><br/>
+						<label style="font-size: 16px;" for="location">Location: </label>
+						<input style="font-size: 16px;border:0;" name="location" value="{{event.location}}"><br/>
+						<label for="date" style="font-size: 16px;">Date:</label>
+						<input type="date" name = "date" style="font-size: 16px;border:0;" value="{{event.date}}"><br/>
+						<input type="hidden" name="num" value={{page*5+loop.index-1}}>
+						<input type="hidden" name="text" id="textupd{{page*5+loop.index-1}}">
+						<input type="submit" value="Update" onclick="document.getElementById('textupd{{page*5+loop.index-1}}').value = document.getElementById('ta{{page*5+loop.index-1}}').value">
+					</form>
 					<form action={{url_for("ui.delevent",lang=lang)}} method="POST">
 						<input type="hidden" name="num" value={{page*5+loop.index-1}}>
 						<input type="hidden" name="value" value="{{event}}">
