@@ -61,6 +61,15 @@ def delannounce(lang):
     else:
         return "Please do not use this API incorrectly"
 
+@ui.route('/<lang>/announcements/update',methods=["POST"])
+@sessionvalidated
+def updannounce(lang):
+    clone = dict(request.form)
+    num = int(clone['num'])
+    del clone['num']
+    update_element_using_index('data/'+lang+'/announcements',num,clone)
+    return redirect(url_for("ui.announcements",lang=lang))
+
 @ui.route('/<lang>/events')
 @sessionvalidated
 def events(lang):

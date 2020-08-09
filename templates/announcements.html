@@ -4,7 +4,11 @@
 			<h2>Announcements:</h2>
 			{% for announcement in names %}
 				<div style="border-color:black;border-style:solid">
-					<p>{{announcement.message}}</p>
+					<form method="POST" action="{{url_for('ui.updannounce',lang=lang)}}">
+						<input type="hidden" name="num" value={{page*5+loop.index-1}}>
+						<input style="font-size: 16px;border:0;" name="message" value="{{announcement.message}}"><br/>
+						<input type="submit" value="Update"/>
+					</form>
 					<form action={{url_for("ui.delannounce",lang=lang)}} method="POST">
 						<input type="hidden" name="num" value={{page*5+loop.index-1}}>
 						<input type="hidden" name="value" value="{{announcement}}">
