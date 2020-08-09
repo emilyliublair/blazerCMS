@@ -45,7 +45,7 @@ def announcements(lang):
 def addannounce(lang):
     page=int(request.args.get('page',0))
     name = next_element(lang,'announcements')
-    content = json.dumps(dict(request.form))
+    content = json.dumps(request.form.to_dict())
     with open('data/'+lang+'/announcements/'+name,'w') as f:
         f.write(content)
     update_log('data/'+lang+'/announcements',name)
@@ -64,7 +64,7 @@ def delannounce(lang):
 @ui.route('/<lang>/announcements/update',methods=["POST"])
 @sessionvalidated
 def updannounce(lang):
-    clone = dict(request.form)
+    clone = request.form.to_dict()
     num = int(clone['num'])
     del clone['num']
     update_element_using_index('data/'+lang+'/announcements',num,clone)
