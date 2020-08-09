@@ -85,7 +85,8 @@ def events(lang):
 @sessionvalidated
 def addevent(lang):
     name = next_element(lang,'events')
-    content = json.dumps(dict(request.form))
+    content = json.dumps(request.form.to_dict())
+    #print(content)
     with open('data/'+lang+'/events/'+name,'w') as f:
         f.write(content)
     update_log('data/'+lang+'/events',name)
@@ -105,7 +106,7 @@ def delevent(lang):
 @ui.route('/<lang>/events/update',methods=["POST"])
 @sessionvalidated
 def updevent(lang):
-    clone = dict(request.form);
+    clone = request.form.to_dict();
     num = int(clone['num'])
     del clone['num']
     update_element_using_index('data/'+lang+'/events',num,clone)
