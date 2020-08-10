@@ -171,7 +171,7 @@ def delclub(lang):
     clubname=request.form['club']
     with open('data/'+lang+'/clubs.json') as f:
         clubdata = json.load(f)['clubs']
-    if clubdata[index] == clubname:
+    if str(clubdata[index]) == str(clubname):
         del clubdata[index]
     with open('data/'+lang+'/clubs.json','w') as f:
         json.dump({'clubs':clubdata},f)
