@@ -146,29 +146,33 @@ def delnew(lang):
     else:
         return "Please do not use this API incorrectly"
 
-@ui.route('<lang>/clubs',methods=["GET","POST"])
+@ui.route('<lang>/clubs')
 @sessionvalidated
 def clubs(lang):
     with open('data/'+lang+'/clubs.json') as f:
-        clubdata = json.load(f)['names']
-    if request.method=="GET":
-        return render_template('clubs.html',clubs=clubdata,lang=lang)
-    elif request.method=="POST":
-        clubdata.append(request.form['clubname'])
-        clubdata=sorted(clubdata)
-        with open('data/'+lang+'/clubs.json','w') as f:
-            json.dump({'names':clubdata},f)
-        return render_template('clubs.html',clubs=clubdata,lang=lang)
+        clubdata = json.load(f)['clubs']
+    return render_template('clubs.html',clubs=clubdata,lang=lang)
+
+@ui.route('<lang>/clubs/add',methods=["POST"])
+@sessionvalidated
+def addclub(lang):
+    with open('data/'+lang+'/clubs.json') as f:
+        clubdata = json.load(f)['clubs']
+    clubdata.append(request.form.to_dict())
+    clubdata=sorted(clubdata,key=lambda x:x['name'])
+    with open('data/'+lang+'/clubs.json','w') as f:
+        json.dump({'clubs':clubdata},f)
+    return redirect(url_for('ui.clubs',lang=lang))
 
 @ui.route('<lang>/clubs/del',methods=["POST"])
 @sessionvalidated
 def delclub(lang):
     index=int(request.form['index'])
-    clubname=request.form['clubname']
+    clubname=request.form['club']
     with open('data/'+lang+'/clubs.json') as f:
-        clubdata = json.load(f)['names']
+        clubdata = json.load(f)['clubs']
     if clubdata[index] == clubname:
         del clubdata[index]
     with open('data/'+lang+'/clubs.json','w') as f:
-        json.dump({'names':clubdata},f)
+        json.dump({'clubs':clubdata},f)
     return redirect(url_for('ui.clubs',lang=lang))

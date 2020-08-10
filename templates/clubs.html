@@ -1,20 +1,26 @@
 <html>
 	<body>
 		<h2>Clubs:</h2>
-		<ul>
-			{% for club in clubs %}
-				<li>{{club}}</li>
+		{% for club in clubs %}
+			<div style='border-width:1px;border-style:solid'>
+				<h3>{{club.name}}</h3>
+				<p>Location: {{club.loc}}</p>
+				<p>Sponsor: {{club.sponsor}}</p>
 				<form action="{{url_for('ui.delclub',lang=lang)}}" method="POST">
-					<input type="hidden" name="clubname" value="{{club}}"/>
+					<input type="hidden" name="club" value="{{club}}"/>
 					<input type="hidden" name="index" value="{{loop.index-1}}"/>
 					<input type="submit" value="Delete"/>
 				</form>
-			{% endfor %}
-		</ul>
+			</div>
+		{% endfor %}
 		<h2>New Club:</h2>
-		<form method="POST">
+		<form method="POST" action="{{url_for('ui.addclub',lang=lang)}}">
 			<label for="name">Club Name:</label>
-			<input type="text" id="name" name="clubname"/><br/>
+			<input type="text" id="name" name="name"/><br/>
+			<label for="loc">Location:</label>
+			<input type="text" id="loc" name="loc"/><br/>
+			<label for="sponsor">Sponsor:</label>
+			<input type="text" id="sponsor" name="sponsor"/><br/>
 			<input type="submit" value="Submit"/>
 		</form>
 	</body>
