@@ -1,5 +1,4 @@
-[
-  {
+{
     "name":"African Club",
     "loc":"216",
     "sponsor":"Mr. A"
@@ -18,5 +17,4 @@
     "name":"Philosophy Club",
     "loc":"255",
     "sponsor":"Mr. D"
-  }
-]
+ }
