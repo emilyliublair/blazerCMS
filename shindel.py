@@ -187,12 +187,22 @@ def sslOps(lang):
 @ui.route('<lang>/sslOps/add',methods=["POST"])
 @sessionvalidated
 def addSslOp(lang):
-    try:
-        with open('data/'+lang+'/sslOps.json') as f:
-            opdata = json.load(f)['ops']
-        opdata.insert(0,request.form.to_dict())
-        with open('data/'+lang+'/sslOps.json','w') as f:
-            json.dump({'ops':opdata},f)
-        return redirect(url_for('ui.sslOps',lang=lang))
-    except Exception as e:
-        return str(e)
+    with open('data/'+lang+'/sslOps.json') as f:
+        opdata = json.load(f)['ops']
+    opdata.insert(0,request.form.to_dict())
+    with open('data/'+lang+'/sslOps.json','w') as f:
+        json.dump({'ops':opdata},f)
+    return redirect(url_for('ui.sslOps',lang=lang))
+
+@ui.route('<lang>/sslOps/del',methods=["POST"])
+@sessionvalidated
+def delSslOp(lang):
+    index=int(request.form['index'])
+    op=request.form['op']
+    with open('data/'+lang+'/sslOps.json') as f:
+        opdata = json.load(f)['ops']
+    if str(opdata[index]) == str(op):
+        del opdata[index]
+    with open('data/'+lang+'/sslOps.json','w') as f:
+        json.dump({'ops':opdata},f)
+    return redirect(url_for('ui.sslOps',lang=lang))

@@ -7,6 +7,11 @@
 				<p>{{op.text}}</p>
 				<p>Location: {{op.loc}}</p>
 				<p>Teacher: {{op.teacher}}</p>
+				<form action="{{url_for('ui.delSslOp',lang=lang)}}" method="POST">
+					<input type="hidden" name="op" value="{{op}}"/>
+					<input type="hidden" name="index" value="{{loop.index-1}}"/>
+					<input type="submit" value="Delete"/>
+				</form>
 			</div>
 		{% endfor %}
 		<h2>New SSL Opportunity</h2>
