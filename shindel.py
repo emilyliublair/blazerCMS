@@ -187,9 +187,12 @@ def sslOps(lang):
 @ui.route('<lang>/sslOps/add',methods=["POST"])
 @sessionvalidated
 def addSslOp(lang):
-    with open('data/'+lang+'/sslOps.json') as f:
-        opdata = json.load(f)['ops']
-    opdata.insert(0,request.form.to_dict())
-    with open('data/'+lang+'/sslOps.json','w') as f:
-        json.dump({'ops':opdata},f)
-    return redirect(url_for('ui.sslOps',lang=lang))
+    try:
+        with open('data/'+lang+'/sslOps.json') as f:
+            opdata = json.load(f)['ops']
+        opdata.insert(0,request.form.to_dict())
+        with open('data/'+lang+'/sslOps.json','w') as f:
+            json.dump({'ops':opdata},f)
+        return redirect(url_for('ui.sslOps',lang=lang))
+    except Exception as e:
+        return str(e)
