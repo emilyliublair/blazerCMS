@@ -176,3 +176,20 @@ def delclub(lang):
     with open('data/'+lang+'/clubs.json','w') as f:
         json.dump({'clubs':clubdata},f)
     return redirect(url_for('ui.clubs',lang=lang))
+
+@ui.route('<lang>/sslOps')
+@sessionvalidated
+def sslOps(lang):
+    with open('data/'+lang+'/sslOps.json') as f:
+        opdata = json.load(f)['ops']
+    return render_template('sslOps.html',ops=opdata,lang=lang)
+
+@ui.route('<lang>/sslOps/add',methods=["POST"])
+@sessionvalidated
+def addSslOp(lang):
+    with open('data/'+lang+'/sslOps.json') as f:
+        opdata = json.load(f)['ops']
+    opdata.insert(0,request.form.to_dict())
+    with open('data/'+lang+'/sslOps.json','w') as f:
+        json.dump({'ops':opdata},f)
+    return redirect(url_for('ui.sslOps',lang=lang))

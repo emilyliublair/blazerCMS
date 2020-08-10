@@ -1,0 +1,25 @@
+<html>
+	<body>
+		<h2>SSL Opportunities:</h2>
+		{% for op in ops %}
+			<div style='border-width:1px;border-style:solid'>
+				<h3>{{op.title}}</h3>
+				<p>{{op.text}}</p>
+				<p>Location: {{op.loc}}</p>
+				<p>Teacher: {{op.teacher}}</p>
+			</div>
+		{% endfor %}
+		<h2>New SSL Opportunity</h2>
+		<form method="POST" action="{{url_for('ui.addSslOp',lang=lang)}}">
+			<label for="title">Title: </label>
+			<input type="text" id="title" name="title"/><br/>
+			<label for="text">Text: </label>
+			<input type="text" id="text" name="text"/><br/>
+			<label for="loc">Location: </label>
+			<input type="text" id="loc" name="loc"/><br/>
+			<label for="teacher">Teacher: </label>
+			<input type="text" id="teacher" name="teacher"/><br/>
+			<input type="submit" value="Submit"/>
+		</form>
+	</body>
+</html>
