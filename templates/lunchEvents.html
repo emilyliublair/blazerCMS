@@ -1,0 +1,22 @@
+<html>
+	<body>
+		<h2>Lunch Events:</h2>
+		{% for event in events %}
+			<div style='border-width:1px;border-style:solid'>
+				<h3>{{event.title}}</h3>
+				<p>{{event.text}}</p>
+				<p>Location: {{event.loc}}</p>
+			</div>
+		{% endfor %}
+		<h2>Create Lunch Event:</h2>
+		<form method="POST" action="{{url_for('ui.addlunchevent',lang=lang)}}">
+			<label for="title">Title:</label>
+			<input type="text" id="title" name="title"/><br/>
+			<label for="text">Text:</label>
+			<input type="text" id="text" name="text"/><br/>
+			<label for="loc">Location:</label>
+			<input type="text" id="loc" name="loc"/><br/>
+			<input type="submit" name="Submit"/>
+		</form>
+	</body>
+</html>

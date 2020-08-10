@@ -206,3 +206,20 @@ def delSslOp(lang):
     with open('data/'+lang+'/sslOps.json','w') as f:
         json.dump({'ops':opdata},f)
     return redirect(url_for('ui.sslOps',lang=lang))
+
+@ui.route('<lang>/lunchEvents')
+@sessionvalidated
+def lunchevents(lang):
+    with open('data/'+lang+'/lunchEvents.json') as f:
+        lunchdata = json.load(f)
+    return render_template('lunchEvents.html',lang=lang,events=lunchdata)
+
+@ui.route('<lang>/lunchEvents/add',methods=["POST"])
+@sessionvalidated
+def addlunchevent(lang):
+    with open('data/'+lang+'/lunchEvents.json') as f:
+        lunchdata = json.load(f)
+    lunchdata.insert(0,request.form.to_dict())
+    with open('data/'+lang+'/lunchEvents.json','w') as f:
+        json.dump(lunchdata,f)
+    return redirect(url_for('ui.lunchevents',lang=lang))
