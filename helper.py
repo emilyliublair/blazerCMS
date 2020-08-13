@@ -39,7 +39,9 @@ def del_log(folder,index):
 def update_element_using_index(folder,index, contents):
     with open(folder+'/log.json') as f:
         name = json.load(f)['names'][index]
-        json.dump(contents, open(folder+'/'+name,"w"))
+        jsondata = json.load(open(folder+'/'+name))
+        jsondata.update(contents)
+        json.dump(jsondata, open(folder+'/'+name,"w"))
 
 def sessionvalidated(f):
     @wraps(f)
@@ -51,3 +53,18 @@ def sessionvalidated(f):
         else:
             return f(*args,**kwargs)
     return wrapper
+
+def formattime(current):
+    if current.hour % 12 == 0:
+        hour = 12
+    else:
+        hour = current.hour % 12
+    if current.minute >= 10:
+        minute = current.minute
+    else:
+        minute = "0"+current.minute
+    if current.hour >= 12:
+        sig = "PM"
+    else:
+        sig = "AM"
+    return "{}:{} {}".format(hour,minute,sig)

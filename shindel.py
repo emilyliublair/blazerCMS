@@ -1,9 +1,10 @@
 import os
 from flask import Blueprint, send_file, make_response, request, session, render_template, redirect, url_for, abort
 import json
-from helper import from_log,update_log,sessionvalidated,next_element,del_log,update_element_using_index
+from helper import from_log,update_log,sessionvalidated,next_element,del_log,update_element_using_index,formattime
 import json
 import base64
+from datetime import datetime
 
 ui = Blueprint('ui', __name__, url_prefix='/ui')
 
@@ -45,7 +46,11 @@ def announcements(lang):
 def addannounce(lang):
     page=int(request.args.get('page',0))
     name = next_element(lang,'announcements')
-    content = json.dumps(request.form.to_dict())
+    requestform = request.form.to_dict()
+    currenttime = datetime.now()
+    requestform['date'] = "{}/{}/{}".format(currenttime.month,currenttime.day,currenttime.year)
+    requestform['time'] = formattime(currenttime)
+    content = json.dumps(requestform)
     with open('data/'+lang+'/announcements/'+name,'w') as f:
         f.write(content)
     update_log('data/'+lang+'/announcements',name)
@@ -86,7 +91,6 @@ def events(lang):
 def addevent(lang):
     name = next_element(lang,'events')
     content = json.dumps(request.form.to_dict())
-    #print(content)
     with open('data/'+lang+'/events/'+name,'w') as f:
         f.write(content)
     update_log('data/'+lang+'/events',name)
