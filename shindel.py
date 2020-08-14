@@ -4,7 +4,7 @@ import json
 from helper import from_log,update_log,sessionvalidated,next_element,del_log,update_element_using_index,formattime
 import json
 import base64
-from datetime import datetime
+from datetime import datetime, date
 import csv
 
 ui = Blueprint('ui', __name__, url_prefix='/ui')
@@ -82,7 +82,27 @@ def importannounce(lang):
     page=int(request.args.get('page',0))
     f = request.files['data']
     f.save('uploads/announcements.csv')
-    #Must figure out how to format CSV so that it can be parsed correctly
+    with open('data/'+lang+'/announcements/timelog.txt') as f:
+        line = f.readline()
+        if len(line) > 0:
+            firstTime = datetime.strptime(line,'%m/%d/%Y %H:%M:%S')
+        else:
+            firstTime = datetime.min
+    with open('uploads/announcements.csv') as f:
+        data = list(csv.reader(f,delimiter=","))[1:]
+    for line in data:
+        nextFileName = next_element(lang,'announcements')
+        content = {'message':line[1],'teacher':line[2]}
+        currenttime = datetime.strptime(line[0],'%m/%d/%Y %H:%M:%S')
+        if currenttime <= firstTime:
+            continue
+        content['date'] = "{}/{}/{}".format(currenttime.month,currenttime.day,currenttime.year)
+        content['time'] = formattime(currenttime)
+        with open('data/'+lang+'/announcements/'+nextFileName,"w") as f:
+            json.dump(content,f)
+        update_log('data/'+lang+'/announcements',nextFileName)
+    with open('data/'+lang+'/announcements/timelog.txt', "w") as timelog:
+        timelog.write(data[-1][0])
     return redirect(url_for('ui.announcements',lang=lang,page=page))
 
 @ui.route('/<lang>/events')
