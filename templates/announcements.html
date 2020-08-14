@@ -27,5 +27,13 @@
 				<input type="submit" value="Submit"/>
 			</form>
 		</div>
+		<div>
+			<h2>Import Announcements:</h2>
+			<form method="POST" action="{{url_for('ui.importannounce',lang=lang,page=page)}}" enctype="multipart/form-data">
+				<label for="data">CSV Data:</label>
+				<input type="file" name="data" id="data" accept=".csv"/><br/>
+				<input type="submit" value="Submit"/>
+			</form>
+		</div>
     </body>
 </html>

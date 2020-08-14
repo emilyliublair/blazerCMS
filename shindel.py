@@ -5,6 +5,7 @@ from helper import from_log,update_log,sessionvalidated,next_element,del_log,upd
 import json
 import base64
 from datetime import datetime
+import csv
 
 ui = Blueprint('ui', __name__, url_prefix='/ui')
 
@@ -74,6 +75,15 @@ def updannounce(lang):
     del clone['num']
     update_element_using_index('data/'+lang+'/announcements',num,clone)
     return redirect(url_for("ui.announcements",lang=lang))
+
+@ui.route('/<lang>/announcements/import',methods=["POST"])
+@sessionvalidated
+def importannounce(lang):
+    page=int(request.args.get('page',0))
+    f = request.files['data']
+    f.save('uploads/announcements.csv')
+    #Must figure out how to format CSV so that it can be parsed correctly
+    return redirect(url_for('ui.announcements',lang=lang,page=page))
 
 @ui.route('/<lang>/events')
 @sessionvalidated
