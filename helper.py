@@ -62,7 +62,7 @@ def formattime(current):
     if current.minute >= 10:
         minute = current.minute
     else:
-        minute = "0"+current.minute
+        minute = "0"+str(current.minute)
     if current.hour >= 12:
         sig = "PM"
     else:
