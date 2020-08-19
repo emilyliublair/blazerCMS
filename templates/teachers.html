@@ -1,0 +1,18 @@
+<html>
+	<body>
+		<div>
+			<h2>Staff:</h2>
+			{% for teacher in teachers %}
+				<div style='border-width:1px;border-style:solid'>
+					<h3>{{teacher.name}}</h3>
+					<h4>Emails:</h4>
+					<ul>
+						{% for email in teacher.emails %}
+							<li>{{email}}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endfor %}
+		</div>
+	</body>
+</html>

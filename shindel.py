@@ -257,3 +257,9 @@ def addlunchevent(lang):
     with open('data/'+lang+'/lunchEvents.json','w') as f:
         json.dump(lunchdata,f)
     return redirect(url_for('ui.lunchevents',lang=lang))
+
+@ui.route('<lang>/teachers')
+@sessionvalidated
+def teachers(lang):
+    teacherdata=json.loads(from_log('data/'+lang+'/teachers',0,'end'))['data']
+    return render_template('teachers.html',lang=lang,teachers=teacherdata)
