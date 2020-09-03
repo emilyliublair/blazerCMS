@@ -1,1 +1,5 @@
-{"name":"Kevin Shindel","emails":["Kevin_M_Shindel@mcpsmd.org"]}
+{"staff": [
+    {"name":"Kevin Shindel","emails":["Kevin_M_Shindel@mcpsmd.org"]}, 
+    {"name": "test", "emails":["test"]}
+    ]
+}
