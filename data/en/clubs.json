@@ -1,6 +1,6 @@
 {"clubs": [
     {"name": "African Club", "meeting": "Every Monday at 4 pm", "link": "https://mcpsmd.instructure.com/?login_success=1", "sponsor": "Mr. A"}, 
-    {"name": "Antibullying Club", "meeting": "Every Monday at 4 pm", "link": "146", "sponsor": "Mr. B"}, 
+    {"name": "Antibullying Club", "meeting": "Every Monday at 4 pm", "link": "https://mcpsmd.instructure.com/?login_success=1", "sponsor": "Mr. B"}, 
     {"name": "Hello World", "meeting": "Every Monday at 4 pm", "link": "304", "sponsor": "Mr. C"}, 
     {"name": "Philosophy Club", "meeting": "Every Monday at 4 pm", "link": "255", "sponsor": "Mr. D"}, 
     {"name": "Test", "meeting": "Every Monday at 4 pm", "link": "Test", "sponsor": "Test"}
